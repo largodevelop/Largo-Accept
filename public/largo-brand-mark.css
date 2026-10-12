@@ -1,0 +1,38 @@
+/* Largo Accept — brand mark (рыжий знак, сдержанное свечение) */
+
+.largo-brand-mark {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  background: url("brand.png") center / contain no-repeat;
+  opacity: 1;
+  filter: drop-shadow(0 0 6px rgba(255, 106, 0, 0.3));
+  animation: largo-brand-breathe 3.6s ease-in-out infinite;
+}
+
+.largo-brand-mark.is-offline {
+  animation: none;
+  filter: grayscale(1) brightness(0.45) contrast(0.9);
+  opacity: 0.72;
+}
+
+@keyframes largo-brand-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(255, 106, 0, 0.18));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 106, 0, 0.38));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .largo-brand-mark {
+    animation: none;
+    filter: drop-shadow(0 0 6px rgba(255, 106, 0, 0.3));
+  }
+  .largo-brand-mark.is-offline {
+    filter: grayscale(1) brightness(0.45) contrast(0.9);
+    opacity: 0.72;
+  }
+}

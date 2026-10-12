@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Largo Accept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="largo-brand-mark.css" />
+  <link rel="stylesheet" href="app.css" />
+  <script defer src="client.js"></script>
+</head>
+<body>
+  <header class="titlebar">
+    <div class="titlebar-brand">
+      <span class="largo-brand-mark titlebar-mark is-offline" id="brand-mark" aria-hidden="true"></span>
+      <span class="titlebar-name">Largo Accept</span>
+    </div>
+    <div class="titlebar-controls">
+      <button type="button" class="win-btn" id="btn-min" aria-label="Свернуть">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 8h8"/></svg>
+      </button>
+      <button type="button" class="win-btn win-close" id="btn-close" aria-label="Закрыть">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="panel" id="panel" data-on="0" data-status="idle">
+    <div class="action-row">
+      <button type="button" class="btn btn-solid" id="btn-toggle">Автопринятие</button>
+      <kbd class="hotkey" title="Горячая клавиша">F10</kbd>
+    </div>
+    <div class="status-row">
+      <span class="lamp" id="lamp" aria-hidden="true"></span>
+      <span class="status-label" id="status-label">// выключено</span>
+    </div>
+  </main>
+</body>
+</html>

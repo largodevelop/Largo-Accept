@@ -1,0 +1,7 @@
+node_modules/
+release/
+bundle/
+.DS_Store
+*.log
+.env
+public/brand-green.png

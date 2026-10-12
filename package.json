@@ -1,0 +1,57 @@
+{
+  "name": "largo-accept",
+  "version": "1.0.0",
+  "description": "Largo Accept — Dota 2 auto-accept",
+  "main": "electron/main.js",
+  "author": "Largo Develop",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "prepare:brand": "node scripts/make-icon.js",
+    "build": "npm run prepare:brand && electron-builder --win dir",
+    "shortcut": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/create-shortcut.ps1",
+    "test": "node scripts/test-detector.js"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "png-to-ico": "^3.0.2",
+    "rcedit": "^5.0.2",
+    "sharp": "^0.35.5"
+  },
+  "build": {
+    "appId": "dev.largo.accept",
+    "productName": "Largo Accept",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "package.json",
+      "public/**/*"
+    ],
+    "asar": true,
+    "asarUnpack": [
+      "public/**"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false
+    },
+    "afterPack": "scripts/after-pack.js"
+  },
+  "allowScripts": {
+    "sharp@0.35.5": true
+  },
+  "dependencies": {
+    "koffi": "^3.3.2"
+  }
+}

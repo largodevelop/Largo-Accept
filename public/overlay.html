@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Largo Accept overlay</title>
+  <link rel="stylesheet" href="overlay.css" />
+</head>
+<body data-on="0">
+  <div class="pill">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="label" id="label">OFF</span>
+  </div>
+  <script>
+    window.overlayApi.onState((on) => {
+      document.body.dataset.on = on ? "1" : "0";
+      document.getElementById("label").textContent = on ? "ON" : "OFF";
+    });
+  </script>
+</body>
+</html>
