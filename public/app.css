@@ -64,8 +64,8 @@ body {
 }
 
 .titlebar-mark {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .titlebar-name {
@@ -234,4 +234,16 @@ body {
   .win-btn {
     transition: none;
   }
+}
+
+/* значок обновления: появляется, когда на GitHub вышла новая версия */
+.win-update {
+  color: var(--accent);
+  animation: update-pulse 1.8s ease-in-out infinite;
+}
+.win-update[hidden] { display: none; }
+.win-update.is-busy { animation: none; opacity: 0.6; cursor: progress; }
+@keyframes update-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(240, 136, 62, 0)); }
+  50% { filter: drop-shadow(0 0 5px rgba(240, 136, 62, 0.9)); }
 }

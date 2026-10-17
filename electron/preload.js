@@ -11,6 +11,11 @@ contextBridge.exposeInMainWorld("largoDesktop", {
   onAcceptChanged(cb) {
     ipcRenderer.on("accept:changed", (_e, state) => cb(state));
   },
+  getUpdate: () => ipcRenderer.invoke("update:status"),
+  installUpdate: () => ipcRenderer.invoke("update:install"),
+  onUpdateChanged(cb) {
+    ipcRenderer.on("update:changed", (_e, state) => cb(state));
+  },
   minimize: () => ipcRenderer.invoke("window:minimize"),
   close: () => ipcRenderer.invoke("window:close"),
 });

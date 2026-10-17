@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const win32 = require("./win32");
 const { createAcceptWorker } = require("./accept-worker");
+const updater = require("./updater");
 // FUTURE: remote phone accept via QR — see ./future-phone.js
 
 let mainWindow = null;
@@ -44,6 +45,43 @@ function getBrandTrayImage() {
   return image;
 }
 
+// ---- автообновление ----
+let updateInfo = null;
+let updating = false;
+
+function broadcastUpdate(extra = {}) {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("update:changed", { available: Boolean(updateInfo), latest: updateInfo?.latest || "", updating, ...extra });
+  }
+  updateTrayMenu();
+}
+
+async function checkUpdates() {
+  if (!app.isPackaged && !process.env.LARGO_UPDATE_API) return;
+  if (updating) return;
+  const info = await updater.checkForUpdate(app.getVersion());
+  updateInfo = info.available ? info : null;
+  broadcastUpdate();
+}
+
+async function installUpdate() {
+  if (!updateInfo || updating) return { ok: false };
+  updating = true;
+  broadcastUpdate({ progress: 0 });
+  try {
+    const zip = await updater.download(updateInfo, (progress) => broadcastUpdate({ progress }));
+    const exe = process.execPath;
+    updater.applyAndRestart(zip, path.dirname(exe), exe, process.pid);
+    quitting = true;
+    app.quit();
+    return { ok: true };
+  } catch (error) {
+    updating = false;
+    broadcastUpdate({ error: String(error && error.message || error) });
+    return { ok: false, error: String(error && error.message || error) };
+  }
+}
+
 function updateTrayMenu() {
   if (!tray) return;
   const running = isWorkerRunning();
@@ -65,7 +103,9 @@ function updateTrayMenu() {
           mainWindow.focus();
         },
       },
-      { type: "separator" },
+      ...(updateInfo
+        ? [{ label: `Обновить до ${updateInfo.latest}`, click: () => installUpdate() }, { type: "separator" }]
+        : [{ type: "separator" }]),
       { label: "Выход", click: () => app.quit() },
     ])
   );
@@ -263,6 +303,8 @@ ipcMain.handle("accept:stop", () => {
   return { ok: true, running: false };
 });
 ipcMain.handle("accept:toggle", () => toggleAccept());
+ipcMain.handle("update:status", () => ({ available: Boolean(updateInfo), latest: updateInfo?.latest || "", updating }));
+ipcMain.handle("update:install", () => installUpdate());
 ipcMain.handle("window:minimize", () => mainWindow?.minimize());
 ipcMain.handle("window:close", () => app.quit());
 
@@ -283,6 +325,8 @@ if (!gotLock) {
     createOverlayWindow();
     createTray();
     globalShortcut.register("F10", () => toggleAccept());
+    setTimeout(() => checkUpdates(), 5000);
+    setInterval(() => checkUpdates(), 5 * 60 * 1000);
   });
 
   app.on("before-quit", () => fullCleanup());
