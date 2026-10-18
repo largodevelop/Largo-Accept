@@ -51,6 +51,9 @@ let updating = false;
 
 function broadcastUpdate(extra = {}) {
   if (mainWindow && !mainWindow.isDestroyed()) {
+    // полоса загрузки на кнопке в панели задач: -1 убирает, 2 — «идёт, сколько неизвестно»
+    if (typeof extra.progress === "number") mainWindow.setProgressBar(extra.progress);
+    else if (!updating || extra.error) mainWindow.setProgressBar(-1);
     mainWindow.webContents.send("update:changed", { available: Boolean(updateInfo), latest: updateInfo?.latest || "", updating, ...extra });
   }
   updateTrayMenu();
@@ -70,6 +73,7 @@ async function installUpdate() {
   broadcastUpdate({ progress: 0 });
   try {
     const zip = await updater.download(updateInfo, (progress) => broadcastUpdate({ progress }));
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setProgressBar(2);
     const exe = process.execPath;
     updater.applyAndRestart(zip, path.dirname(exe), exe, process.pid);
     quitting = true;

@@ -37,6 +37,14 @@ function setUi(state) {
 function setUpdate(state) {
   if (!els.update || !state) return;
   els.update.hidden = !state.available;
+  const line = document.getElementById("update-line");
+  if (line) {
+    const known = typeof state.progress === "number";
+    line.hidden = !state.updating;
+    line.classList.toggle("is-indeterminate", state.updating && !known);
+    const fill = document.getElementById("update-line-fill");
+    if (fill) fill.style.width = known ? `${Math.round(state.progress * 100)}%` : "";
+  }
   els.update.classList.toggle("is-busy", Boolean(state.updating));
   const pct = typeof state.progress === "number" ? ` (${Math.round(state.progress * 100)}%)` : "";
   els.update.title = state.updating
