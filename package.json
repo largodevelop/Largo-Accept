@@ -1,6 +1,6 @@
 {
   "name": "largo-accept",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Largo Accept — Dota 2 auto-accept",
   "main": "electron/main.js",
   "author": "Largo Develop",

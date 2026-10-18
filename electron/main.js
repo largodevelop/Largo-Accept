@@ -73,7 +73,9 @@ async function installUpdate() {
   broadcastUpdate({ progress: 0 });
   try {
     const zip = await updater.download(updateInfo, (progress) => broadcastUpdate({ progress }));
-    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setProgressBar(2);
+    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.setProgressBar(1);
+    broadcastUpdate({ progress: 1 });
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // полная полоса видна, потом приложение закрывается и обновляется
     const exe = process.execPath;
     updater.applyAndRestart(zip, path.dirname(exe), exe, process.pid);
     quitting = true;
